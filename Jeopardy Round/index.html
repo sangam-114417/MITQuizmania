@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Jeopardy Board</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="left-actions">
+      <button id="toggleEdit" class="btn">Edit mode: Off</button>
+      <button id="newBoard" class="btn">New board</button>
+      <button id="importBtn" class="btn">Import JSON</button>
+      <button id="importDbBtn" class="btn">Import DB</button>
+      <input id="importDbFile" type="file" accept="application/json" hidden />
+      <button id="saveSnapshotBtn" class="btn">Save snapshot</button>
+      <button id="exportDbBtn" class="btn">Export DB</button>
+      <button id="exportBtn" class="btn">Export JSON</button>
+      <input id="importFile" type="file" accept="application/json" hidden />
+    </div>
+    <div class="right-actions">
+      <button id="fullscreenBtn" class="btn">Fullscreen</button>
+      <button id="resetUsed" class="btn">Reset clues</button>
+    </div>
+  </header>
+
+  <main>
+    <h1 id="roundTitle" class="round-title">Jeopardy Round</h1>
+    <section id="board" class="board" aria-label="Jeopardy Board"></section>
+  </main>
+
+  <aside class="scores">
+    <h2>Teams</h2>
+    <div id="teams"></div>
+    <div class="team-controls">
+      <input id="teamCount" type="number" min="0" max="10" value="3" />
+      <button id="applyTeams" class="btn">Apply</button>
+    </div>
+  </aside>
+
+  <!-- Clue Modal -->
+  <div id="clueModal" class="modal" aria-hidden="true">
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="clueTitle">
+      <button class="close" id="closeClue">×</button>
+
+      <h3 id="clueTitle"></h3>
+      <div id="clueBody" class="clue-body"></div>
+
+      <div id="mediaContainer" class="media-container"></div>
+
+      <div class="clue-actions">
+        <button id="playAudio" class="btn" disabled>Play audio</button>
+        <button id="revealBtn" class="btn">Reveal answer</button>
+        <button id="hideBtn" class="btn" disabled>Hide answer</button>
+        <button id="markUsed" class="btn">Mark as used</button>
+      </div>
+
+      <div id="answerPanel" class="answer-panel hidden">
+        <strong>Answer:</strong> <span id="answerText"></span>
+      </div>
+
+      <div class="score-actions">
+        <label for="awardTo"><strong>Award to:</strong></label>
+        <select id="awardTo"></select>
+        <button id="awardPoints" class="btn">+ Points</button>
+        <button id="deductPoints" class="btn">- Points</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Edit Modal -->
+  <div id="editModal" class="modal" aria-hidden="true">
+    <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="editTitle">
+      <button class="close" id="closeEdit">×</button>
+
+      <h3 id="editTitle">Edit clue</h3>
+      <form id="editForm" class="edit-form">
+        <div class="grid2">
+          <div>
+            <label><strong>Category name</strong>
+              <input type="text" id="editCategoryName" />
+            </label>
+          </div>
+          <div>
+            <label><strong>Points</strong>
+              <input type="number" id="editPoints" min="0" step="5" />
+            </label>
+          </div>
+        </div>
+
+        <label><strong>Question</strong>
+          <textarea id="editQuestion" rows="4" placeholder="Type the question"></textarea>
+        </label>
+
+        <label><strong>Answer</strong>
+          <input type="text" id="editAnswer" placeholder="Type the answer" />
+        </label>
+
+        <div class="grid3">
+          <div>
+            <label><strong>Image URL</strong>
+              <input type="url" id="editImageUrl" placeholder="https://..." />
+            </label>
+            <input type="file" id="editImageFile" accept="image/*" />
+          </div>
+          <div>
+            <label><strong>Audio URL</strong>
+              <input type="url" id="editAudioUrl" placeholder="https://..." />
+            </label>
+            <input type="file" id="editAudioFile" accept="audio/*" />
+          </div>
+          <div>
+            <label><strong>Video URL</strong>
+              <input type="url" id="editVideoUrl" placeholder="https://..." />
+            </label>
+            <input type="file" id="editVideoFile" accept="video/*" />
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" id="saveEdit" class="btn primary">Save</button>
+          <button type="button" id="deleteClue" class="btn danger">Delete clue</button>
+        </div>
+
+        <details>
+          <summary><strong>Advanced</strong></summary>
+          <label><strong>Used</strong>
+            <input type="checkbox" id="editUsed" />
+          </label>
+          <label><strong>Media alt text</strong>
+            <input type="text" id="editAlt" placeholder="Description for accessibility" />
+          </label>
+        </details>
+      </form>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="tips">
+      <strong>Shortcuts:</strong> Space = Reveal/Hide, Esc = Close modal, F11 = Fullscreen
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
